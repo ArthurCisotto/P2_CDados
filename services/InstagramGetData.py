@@ -72,4 +72,5 @@ def getApiData(jsondata):
 
     hashtag_use_rate = total_hashtags / posts
 
+
     return hashtag_use_rate
