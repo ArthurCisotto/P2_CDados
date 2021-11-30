@@ -43,7 +43,7 @@ def check_if_is_fake(account_data):
 
     Xtrain, Xval, Ytrain, Yval = train_test_split(x, y, test_size=0.5, random_state=0)
 
-    trees = RandomForestClassifier(n_estimators=1000,random_state=0, n_jobs=-1)
+    trees = RandomForestClassifier(n_estimators=1000,random_state=None , n_jobs=-1)
     trees.fit(Xtrain, Ytrain)
 
     # Acurácia
