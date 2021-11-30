@@ -1,9 +1,7 @@
 
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pickle
 from services.InstagramGetData import getApiData, getUsername
@@ -21,14 +19,6 @@ def load_data(nrows):
 
 data = load_data(10000)
 
-def generate_correlation_chart(df):
-    x=df.corr()
-    lista = x.values.tolist()
-    fig = px.imshow(lista,  labels=dict(x="Features", y="Features", color="Correlação"),
-                x=['pos', 'flw', 'flg', 'bl', 'pic', 'lin', 'cl', 'cz', 'ni', 'erl', 'erc', 'lt', 'hc', 'pr', 'fo', 'cs', 'pi'],
-                y=['pos', 'flw', 'flg', 'bl', 'pic', 'lin', 'cl', 'cz', 'ni', 'erl', 'erc', 'lt', 'hc', 'pr', 'fo', 'cs', 'pi'],
-                zmax = 1, zmin = -1)
-    st.plotly_chart(fig, use_container_width=True)
 
 def check_if_is_fake(account_data):
     dataToTree = pd.read_csv('user_fake_authentic_4class.csv')
@@ -71,10 +61,18 @@ with row1_2:
     dados da conta daquele usuário
     """)
 
-st.title("Gráfico de correlação")
-generate_correlation_chart(data)
+st.markdown("""
+O objetivo deste classificador é, a partir de dados reais de uma conta de um usuário do Instagram, prever se a conta daquele usuário é: "fake" e, ainda, classifica-lo dentre diferentes tipos específicos de usuários. As classificações são feitas a partir de um arquivo JSON que você pode encontrar as **instruções de como obtê-lo no final dessa página** e leva em conta 15 características da conta. Tais características e a análise delas estão detalhadas no notebook do projeto.
 
+Para analisar uma conta, basta seguir as instruções do **README** do repositório ou assistir o vídeo explicativo que está logo abaixo.
+""")
 
+show_video = st.checkbox('Clique aqui para ver o vídeo de instrução')
+
+if show_video:
+    st.video("https://youtu.be/feqqALVvYHI")
+
+st.subheader("Classificador")
 json_file = st.file_uploader("Carregar o arquivo JSON da conta do Instagram", type=None, accept_multiple_files=False, on_change=None, args=None, kwargs=None)
 st.text('Não sabe como obter o arquivo? Clique no botão que está no fim dessa página')
 
