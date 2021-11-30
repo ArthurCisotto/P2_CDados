@@ -5,7 +5,7 @@ import plotly.express as px
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
-
+import pickle
 from services.InstagramGetData import getApiData, getUsername
 
 
@@ -41,16 +41,15 @@ def check_if_is_fake(account_data):
     x = dataToTree.drop("class", axis=1)
     y = dataToTree["class"]
 
-    Xtrain, Xval, Ytrain, Yval = train_test_split(x, y, test_size=0.5, random_state=0)
+    Xtrain, Xval, Ytrain, Yval = train_test_split(x, y, test_size=0.5, random_state=None)
 
-    trees = RandomForestClassifier(n_estimators=1000,random_state=None , n_jobs=-1)
-    trees.fit(Xtrain, Ytrain)
+    loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
 
     # Acurácia
-    p = trees.score(Xval, Yval)
+    p = loaded_model.score(Xval, Yval)
 
     lista = np.array(account_data)
-    result = trees.predict(lista.reshape(1, -1))
+    result = loaded_model.predict(lista.reshape(1, -1))
 
     resultados_dict = {0: 'Real', 1: 'Fake', 2: 'Fake Inativo', 3: 'Possível SPAM'}
     
